@@ -10,6 +10,10 @@
 
 <body>
     <div class="">User Dashboard</div>
+    <form action="{{ route('logout')}}" method="POST">
+        @csrf
+        <button type="submit">Logout</button>
+    </form>
 </body>
 
 </html>

@@ -24,7 +24,7 @@ class AuthController extends Controller
                 return redirect()->intended('/admin/dashboard');
             }
 
-            return redirect()->intended('/user/dashboard');
+            return redirect()->intended('/student/dashboard');
         }
 
         return back()->withErrors([
@@ -32,7 +32,16 @@ class AuthController extends Controller
         ]);
     }
 
-    public function logout(){
+    public function logout(Request $request)
+    {
+        Auth::logout();
 
+        // Remove all data from the session
+        $request->session()->invalidate();
+
+        // Regenerate csrf token for next session
+        $request->session()->regenerate();
+
+        return redirect()->route('show.login');
     }
 }

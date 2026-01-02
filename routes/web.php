@@ -12,12 +12,12 @@ Route::get('/', function () {
 
 
 Route::group(['middleware' => 'guest'], function () {
-    
+
     // Login Form
     Route::get('/login', action: [AuthController::class, 'showLogin'])->name('show.login');
 
     // Post Login Form
-    Route::post('login', [AuthController::class, 'login'])->name('login');
+    Route::post('/login', [AuthController::class, 'login'])->name('login');
 });
 
 
@@ -35,4 +35,6 @@ Route::group(['middleware' => 'auth'], function () {
         // User Dashboard Page
         Route::get('/dashboard', [StudentDashboardController::class, 'index'])->name('student.dashboard.index');
     });
+
+    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 });
