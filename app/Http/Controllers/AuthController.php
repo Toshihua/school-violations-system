@@ -20,10 +20,7 @@ class AuthController extends Controller
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
 
-            $user = Auth::user();
-
             if (Auth::user()->role->role_name === 'Faculty') {
-
                 return redirect()->intended('/admin/dashboard');
             }
 
@@ -33,5 +30,9 @@ class AuthController extends Controller
         return back()->withErrors([
             'email' => 'Invalid credentials.',
         ]);
+    }
+
+    public function logout(){
+
     }
 }
