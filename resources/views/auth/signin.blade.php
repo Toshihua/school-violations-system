@@ -19,7 +19,7 @@
 
                             <div class="d-flex justify-content-center mb-4">
                                 <div style="background-color: #b22222; width: 80px; height: 80px; border-radius: 18px; display: flex; align-items: center; justify-content: center;">
-                                    <i class="bi bi-mortarboard text-white" style="font-size: 40px;"></i>
+                                    <img src="/studentlog.png" alt="StudentLogo" class="m-2" style="width: 80px;">
                                 </div>
                             </div>
 
@@ -32,7 +32,7 @@
                                     <label class="form-label ms-1" style="font-weight: 500;">Email Address</label>
                                     <div class="input-group shadow-sm" style="border-radius: 12px; overflow: hidden; border: 1px white;">
                                         <span class="input-group-text border-0" style="background-color: #eb5757; color: white; padding: 12px 16px;">
-                                            <i class="bi bi-person-fill"></i>
+                                            <img src="/email.png" alt="email-icon" style="width: 18px; height: 18px; cursor: pointer;" title="Email Icon">
                                         </span>
                                         <input type="email" class="form-control border-0" name="email" placeholder="Email Address" style="padding: 12px;">
                                     </div>
@@ -42,12 +42,9 @@
                                     <label class="form-label ms-1" style="font-weight: 500;">Password</label>
                                     <div class="input-group shadow-sm" style="border-radius: 0.8rem; overflow: hidden; border: 1px white;">
                                         <span class="input-group-text border-0" style="background-color: #eb5757; color: white; padding: 12px 16px;">
-                                            <i class="bi bi-briefcase-fill"></i>
+                                            <img src="/password.png" alt="password-icon" style="width: 18px; height: 18px; cursor: pointer;" title="Password Icon">
                                         </span>
                                         <input type="password" class="form-control border-0" name="password" placeholder="••••••••••••" style="padding: 12px;">
-                                        <span class="input-group-text border-0 bg-white text-muted">
-                                            <i class="bi bi-eye-slash "></i>
-                                        </span>
                                     </div>
                                 </div>
 
