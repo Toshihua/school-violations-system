@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Appeal;
+use App\Models\ViolationRecord;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\DB;
 
@@ -15,9 +16,16 @@ class AppealFactory extends Factory
 
     public function definition(): array
     {
+        $violation = ViolationRecord::whereDoesntHave('appeal') // no existing appeal
+            ->where('status_id', 1)
+            ->inRandomOrder()
+            ->first();
+
+        $violationId = $violation?->id ?? ViolationRecord::inRandomOrder()->value('id');
+
         return [
             'appeal_content' => fake()->paragraph(),
-            'violation_record_id' => DB::table('violation_records')->inRandomOrder()->value('id') ?? 1,
+            'violation_record_id' => $violationId,
         ];
     }
 }
