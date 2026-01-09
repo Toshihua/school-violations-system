@@ -35,20 +35,7 @@
                         <span class="fw-bold" style="color: #800000;">
                             V-2026-{{ str_pad($record->id, 3, '0', STR_PAD_LEFT) }}
                         </span>
-
-                        @if($record->status_id == 1)
-                        <span class="badge bg-warning text-dark rounded-1"
-                            style="font-size: 11px; padding: 6px 10px;">PENDING</span>
-                        @elseif($record->status_id == 2)
-                        <span class="badge bg-info text-white rounded-1"
-                            style="font-size: 11px; padding: 6px 10px;">UNDER REVIEW</span>
-                        @elseif($record->status_id == 3)
-                        <span class="badge bg-success text-white rounded-1"
-                            style="font-size: 11px; padding: 6px 10px;">RESOLVED</span>
-                        @else
-                        <span class="badge bg-secondary text-white rounded-1"
-                            style="font-size: 11px; padding: 6px 10px;">UNKNOWN</span>
-                        @endif
+                        <x-status-badge :status="$record->status->status_name" />
                     </div>
 
                     <h6 class="fw-bold mb-1">User ID: {{ $record->user_id }}</h6>
