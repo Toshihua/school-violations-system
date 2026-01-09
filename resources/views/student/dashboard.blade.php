@@ -99,19 +99,7 @@
                                 <strong class="small d-block" style="max-width: 70%;">
                                     {{ $record->violationSanction->violation->violation_name }}
                                 </strong>
-                                @if($record->status->status_name == 'In progress')
-                                <span class="badge bg-info text-uppercase" style="font-size: 10px;">
-                                    In Progress
-                                </span>
-                                @elseif($record->status->status_name == 'Under review')
-                                <span class="badge bg-warning text-dark text-uppercase" style="font-size: 10px;">
-                                    Under Review
-                                </span>
-                                @else
-                                <span class="badge bg-success text-uppercase" style="font-size: 10px;">
-                                    Resolved
-                                </span>
-                                @endif
+                                <x-status-badge :status="$record->status->status_name" />
                             </div>
                             <div class="mt-1">
                                 <small class="text-muted" style="font-size: 10px;">
@@ -206,20 +194,7 @@
                                                 @endif
                                             </td>
                                             <td>
-                                                @if($record->status->status_name == 'In progress')
-                                                <span class="badge bg-info text-uppercase" style="font-size: 12px;">
-                                                    In Progress
-                                                </span>
-                                                @elseif($record->status->status_name == 'Under review')
-                                                <span class="badge bg-warning text-dark text-uppercase"
-                                                    style="font-size: 12px;">
-                                                    Under Review
-                                                </span>
-                                                @else
-                                                <span class="badge bg-success text-uppercase" style="font-size: 12px;">
-                                                    Resolved
-                                                </span>
-                                                @endif
+                                                <x-status-badge :status="$record->status->status_name" />
                                             </td>
                                             <td class="small">{{ $record->violationSanction->sanction->sanction_name }}
                                             </td>
