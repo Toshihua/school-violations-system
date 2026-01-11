@@ -34,11 +34,12 @@ class DashboardController extends Controller
             ->get();
 
         $chartOptions = [
-            'chart_title' => 'Violations Last 7 Days',
+            'chart_title' => 'Violations in past 7 Days',
             'report_type' => 'group_by_date',
             'model' => 'App\Models\ViolationRecord',
             'group_by_field' => 'created_at',
             'chart_type' => 'bar',
+            'chart_color' => '255, 215, 215',
             'group_by_period' => 'day',
             'aggregate_function' => 'count',
             'filter_field' => 'created_at',

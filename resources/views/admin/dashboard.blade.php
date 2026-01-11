@@ -75,9 +75,22 @@
 
             {{-- Recent Violations Table --}}
             <div class="card shadow border-0 mb-4">
-                <div class="card-header bg-primary text-white fw-bold">
-                   <i class="bi bi-exclamation-triangle-fill me-1"></i>
-                   Recent Violations
+                <div class="card-header d-flex justify-content-between bg-primary text-white ">
+                    <div>
+                        <i class="bi bi-exclamation-triangle-fill me-1"></i>
+                        <span class="fw-bold">
+
+                            Recent Violations
+                        </span>
+                    </div>
+                    <div class="">
+                        <a href="{{ route('violations-management.index') }}"
+                            class="text-white icon-link icon-link-hover">
+                            View All
+                            <i class="bi bi-arrow-right d-flex align-items-center"></i>
+                        </a>
+                    </div>
+
                 </div>
                 <div class="card-body p-0">
                     <div class="table">
@@ -142,7 +155,7 @@
                                     </td>
                                     <td>
                                         <span class="badge bg-{{ $appeal->is_accepted ? 'success' : 'warning' }}">
-                                            {{  $appeal->is_accepted ? 'Resolved' : 'Pending'  }}
+                                            {{ $appeal->is_accepted ? 'Resolved' : 'Pending' }}
                                         </span>
                                     </td>
                                 </tr>
