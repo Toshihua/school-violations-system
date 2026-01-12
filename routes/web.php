@@ -44,6 +44,9 @@ Route::group(['middleware' => 'auth'], function () {
         // Posting violation
         Route::post('/log-violation', [ViolationController::class, 'store'])->name('admin.violations-management.logViolation');
 
+        // Deleting violation (soft deleting)
+        Route::delete('/delete-violation', [ViolationController::class, 'destroy'])->name('admin.violations-management.deleteViolation');
+
         //Violation Resource (in case of refactor)
         Route::resource('/violations-management', ViolationController::class);
     });

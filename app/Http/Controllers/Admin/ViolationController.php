@@ -151,5 +151,11 @@ class ViolationController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id) {}
+    public function destroy(Request $request) {
+        $violation_record_id = $request->input('violation_record_id');
+
+        ViolationRecord::destroy($violation_record_id);
+
+        return redirect()->route('violations-management.index');
+    }
 }

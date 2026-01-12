@@ -82,7 +82,8 @@
                                     data-bs-target="#editViolationModal-{{ $record->id }}">
                                     <i class="bi bi-pencil-square"></i>
                                 </button>
-                                <button class="btn-action-delete" onclick="confirmDelete('{{ $record->id }}')">
+                                <button class="btn-action-delete" data-bs-toggle="modal"
+                                    data-bs-target="#deleteConfirmationModal-{{ $record->id }}">
                                     <i class="bi bi-trash text-red"></i>
                                 </button>
                             </td>
@@ -91,7 +92,7 @@
                         <x-modals.view-violation :record="$record" :id="'viewViolationModal-'.$record->id" />
                         <x-modals.edit-violation :record="$record" :id="'editViolationModal-'.$record->id"
                             :violations="$violations" />
-
+                        <x-modals.delete-violation :record="$record" :id="'deleteConfirmationModal-'.$record->id"/>
                         @empty
                         <tr>
                             <td colspan="9" class="text-center text-muted py-4">No violation records found.</td>
@@ -288,7 +289,11 @@
                 </div>
                 <div class="modal-footer justify-content-center border-0 pt-0">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-danger" onclick="executeDelete()">Delete</button>
+                    <form action="{{ route('admin.violations-management.deleteViolation') }}" method="POST">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                    </form>
                 </div>
             </div>
         </div>
