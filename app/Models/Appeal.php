@@ -19,6 +19,11 @@ class Appeal extends Model
         'is_accepted' => 'boolean',
     ];
 
+    public function formatCaseId()
+    {
+        return 'A-'.now()->year.'-'.$this->id;
+    }
+
     public function violationRecord()
     {
         return $this->belongsTo(ViolationRecord::class);

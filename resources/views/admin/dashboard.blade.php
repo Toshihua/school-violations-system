@@ -140,8 +140,8 @@
                         <table class="table table-hover mb-0 align-middle text-nowrap">
                             <thead class="table-light">
                                 <tr>
-                                    <th> Appeal ID</th>
-                                    <th>Case ID</th>
+                                    <th class="col-2 text-center"> Appeal ID</th>
+                                    <th class="col-3 text-center">Case ID</th>
                                     <th>Student</th>
                                     <th>Status</th>
                                 </tr>
@@ -149,8 +149,8 @@
                             <tbody>
                                 @forelse ($recentAppeals as $appeal)
                                 <tr>
-                                    <td>A-{{ $appeal->id }}</td>
-                                    <td>{{ $appeal->violationRecord->formatCaseId() }}</td>
+                                    <td class="text-center text-success fw-bold">{{ $appeal->formatCaseId() }}</td>
+                                    <td class="text-center">{{ $appeal->violationRecord->formatCaseId() }}</td>
                                     <td class="text-truncate" style="max-width: 140px;">
                                         {{ $appeal->violationRecord->user->first_name.'
                                         '.$appeal->violationRecord->user->last_name }}
