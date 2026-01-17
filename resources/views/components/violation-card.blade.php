@@ -1,29 +1,50 @@
-<div class="card shadow-lg">
-    <div class="card-body">
+<div class="card shadow-lg border-0 h-100">
+    <div class="card-body d-flex flex-column">
         <div class="d-flex justify-content-between align-items-start mb-3">
-            <span class="fw-bold" style="color: #800000;">
-                V-2026-{{ str_pad($record->id, 3, '0', STR_PAD_LEFT) }}
+            <span class="fw-bold" style="color: #800000; font-size: 0.9rem;">
+                {{ $record->formatCaseId() }}
             </span>
             <x-status-badge :status="$record->status->status_name" />
         </div>
 
-        <h6 class="fw-bold mb-1">User ID: {{ $record->user_id }}</h6>
-        <p class="text-muted small mb-3">
-            Student No: 202X-{{ $record->user_id }}XXXX-MN-0
+        <h6 class="mb-1">
+            <span class="fw-bold text-primary">
+                {{ $record->user->last_name }},
+            </span>
+            <span class="text-dark">{{ $record->user->first_name }}</span>
+        </h6>
+        <p class="text-muted small mb-2">
+            <i class="bi bi-person-badge me-1"></i>{{ $record->user->school_id }}
         </p>
 
-        <div class="mb-3">
-            <span class="d-block fw-bold" style="font-size: 14px;">
-                Violation Code: {{ $record->vio_sanct_id }}
-            </span>
-            <small class="text-muted" style="font-size: 12px;">
-                {{ \Carbon\Carbon::parse($record->created_at)->format('Y-m-d') }}
-            </small>
+        <span class="d-block fw-semibold text-dark mb-1 pb-1" style="font-size: 14px;">
+            {{ $record->violationSanction->violation->violation_name }}
+        </span>
+
+        <div class="m-2 pb-2 border-bottom mt-auto">
+            <div class="d-flex justify-content-between align-items-center">
+                <small class="text-muted" style="font-size: 12px;">
+                    <i class="bi bi-calendar3 me-1"></i>{{ $record->created_at->format('M d, Y') }}
+                </small>
+                <x-offense-badge :offense="$record->violationSanction->no_of_offense" />
+            </div>
         </div>
 
-        <button class="btn w-100 btn-sm fw-bold" style="border: 1px solid #800000; color: #800000; padding: 8px;"
-            data-bs-toggle="modal" data-bs-target="#viewViolationModal-{{ $record->id }}">
-            <i class="bi bi-eye me-1"></i> View Details
-        </button>
+        <div class="">
+            <div class="d-flex gap-2">
+                <button type="button" class="btn btn-sm flex-fill bg-red text-white border p-1" data-bs-toggle="modal"
+                    data-bs-target="#viewViolationModal-{{ $record->id }}">
+                    <i class="bi bi-eye me-1"></i> View
+                </button>
+                <button type="button" class="btn btn-sm " data-bs-toggle="modal"
+                    data-bs-target="#editViolationModal-{{ $record->id }}" title="Edit violation">
+                    <i class="bi bi-pencil-square"></i>
+                </button>
+                <button type="button" class="btn btn-sm text-red" data-bs-toggle="modal"
+                    data-bs-target="#deleteViolationModal-{{ $record->id }}" title="Delete violation">
+                    <i class="bi bi-trash"></i>
+                </button>
+            </div>
+        </div>
     </div>
 </div>

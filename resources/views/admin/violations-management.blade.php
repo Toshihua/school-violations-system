@@ -126,7 +126,7 @@
             </div>
 
             {{-- Display for screens smaller than md --}}
-            <div class="d-flex d-md-none">
+            <div class="d-block d-md-none">
                 <div class="row row-cols-1 row-cols-sm-2 g-3">
                     @forelse ($violationRecords as $record)
                     <div class="col">
