@@ -6,15 +6,22 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body p-4">
-                <form action="{{ route('admin.violations-management.update', $record) }}" method="POST"> @csrf @method('PATCH')
-                    <div class="mb-3"><label class="fw-bold">Student ID</label><input type="text" class="form-control"
-                            placeholder="{{ $record->user->school_id }}" disabled></div>
-                    <div class="mb-3"><label class="fw-bold">Student Name</label><input type="text" class="form-control"
-                            placeholder="{{ $record->user->first_name.' '.$record->user->last_name }}" disabled></div>
+                <form action="{{ route('admin.violations-management.update', $record) }}" method="POST">
+                    @csrf
+                    @method('PATCH')
+                    <div class="mb-3">
+                        <label class="fw-bold">Student ID</label>
+                        <input type="text" class="form-control" placeholder="{{ $record->user->school_id }}" disabled>
+                    </div>
+                    <div class="mb-3">
+                        <label class="fw-bold">Student Name</label>
+                        <input type="text" class="form-control"
+                            placeholder="{{ $record->user->first_name.' '.$record->user->last_name }}" disabled>
+                    </div>
 
                     <div class="mb-3">
                         <label class="fw-bold">Violation Type</label>
-                        <select class="form-select" name="violation_id">    
+                        <select class="form-select" name="violation_id">
                             <option selected disabled>Select Violation Type</option>
                             @foreach ($violations as $violation)
                             <option value="{{ $violation->id }}">{{ $violation->violation_name }}</option>

@@ -84,7 +84,7 @@ class ViolationController extends Controller
         $result = $this->insertNewViolation($user_id, $vio_sanct_id);
 
         if ($result == 0) {
-            return "Error:  Action failed.";
+            return 'Error:  Action failed.';
         }
 
         return redirect()->route('admin.violations-management.index');
@@ -145,8 +145,8 @@ class ViolationController extends Controller
                 'status_id' => 1,
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
-                'deleted_at' => null
-            ]
+                'deleted_at' => null,
+            ],
 
         ]);
 
@@ -156,20 +156,18 @@ class ViolationController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
-    {
-        dd('This is the SHOW controller.  Add @method to your form');
-    }
+    public function show(string $id) {}
 
     /**
      * Update the specified violation in storage.
      */
-    public function update(ViolationRecord $violations_management, Request $request) {
-    
-        $violation_id = request('violation_id');    
+    public function update(ViolationRecord $violations_management)
+    {
+
+        $violation_id = request('violation_id');
 
         if ($violation_id == null) {
-            return "Error:  Violation cannot be null.";
+            return 'Error:  Violation cannot be null.';
         }
 
         $user_id = $violations_management->user->id;
@@ -179,7 +177,7 @@ class ViolationController extends Controller
         // If the current record's violation_id and newly-entered violation_id are the same, do nothing.
         if (strcmp($violation_id, $prev_violation_id) == 0) {
             return redirect()->route('admin.violations-management.index');
-        } 
+        }
 
         // If the current record's violation_id and newly-entered violation_id are different
         $violation_count = $this->countViolationOfStudent($user_id, $violation_id);
@@ -188,13 +186,13 @@ class ViolationController extends Controller
         $result = $violations_management->update([
             'vio_sanct_id' => $vio_sanct_id,
             'status_id' => 1,
-            'updated_at'=> Carbon::now(),
+            'updated_at' => Carbon::now(),
         ]);
 
         if ($result == 0) {
-            return "Error: Action failed";
+            return 'Error: Action failed';
         }
-    
+
         return redirect()->route('admin.violations-management.index');
     }
 
@@ -202,7 +200,7 @@ class ViolationController extends Controller
      * Remove the specified resource from storage.
      */
     public function destroy(ViolationRecord $violations_management)
-    {   
+    {
         $violations_management->delete();
 
         return redirect()->route('admin.violations-management.index');

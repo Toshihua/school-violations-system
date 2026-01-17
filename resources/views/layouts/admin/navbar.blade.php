@@ -2,7 +2,7 @@
     <div class="container-fluid px-4 d-flex justify-content-between align-items-center">
 
         <div class="d-flex align-items-center">
-            <button class="btn" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebar">
+            <button class="btn p-0 pe-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebar">
                 <i class="bi bi-list text-primary fs-3"></i>
             </button>
 

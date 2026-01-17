@@ -1,8 +1,8 @@
 @extends('layouts.admin.app')
 
-@section('navbar-title', 'Violation and Sanction Management')
+@section('navbar-title', 'Violation Management')
 @section('content')
-<div class="container-fluid px-4">
+<div class="container-fluid">
     <div class="card border-0 shadow-sm">
         <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
             <h5 class="fw-bold mb-0">Violation Logs</h5>
@@ -47,7 +47,7 @@
                 </div>
             </div>
 
-            <div class="table-responsive">
+            <div class="d-none d-md-block table-responsive">
                 <table class="table table-hover table-striped align-middle">
                     <thead class="table-light">
                         <tr class="text-nowrap">
@@ -55,7 +55,7 @@
                             {{-- <th class="text-center">Student ID</th> --}}
                             <th class="">Student Name</th>
                             <th class="">Violation Type</th>
-                            <th class="">Date</th>
+                            <th class="d-none d-lg-block">Date</th>
                             <th class="">Record</th>
                             <th class="">Status</th>
                             <th class="text-center">Actions</th>
@@ -65,7 +65,7 @@
                         @forelse($violationRecords as $record)
                         <tr data-bs-toggle="modal" data-bs-target="#viewViolationModal-{{ $record->id }}" role="button">
                             <td class="text-nowrap fw-bold text-danger">
-                               {{ $record->formatCaseId() }}
+                                {{ $record->formatCaseId() }}
                             </td>
                             {{-- <td class="fw-bold text-nowrap text-center">
                                 {{ $record->user->school_id}}
@@ -74,8 +74,8 @@
                                 <span
                                     class="d-flex justify-content-between align-items-center gap-1 fs-5 fw-bold text-primary">
                                     {{ $record->user->last_name}}
-                                    <span class="fs-6 text-secondary fw-light">
-                                       ({{ $record->user->school_id}})
+                                    <span class="d-none d-lg-inline fs-6 text-secondary fw-light">
+                                        ({{ $record->user->school_id}})
                                     </span>
 
                                 </span>
@@ -86,7 +86,7 @@
                             <td class="">
                                 {{ $record->violationSanction->violation->violation_name}}
                             </td>
-                            <td class="text-nowrap">
+                            <td class="text-nowrap d-none d-lg-table-cell">
                                 {{ $record->created_at->format('Y-m-d') }}
                             </td>
                             <td>
@@ -98,21 +98,17 @@
                             </td>
 
                             <td class="text-center text-nowrap">
-                                <button class="border-0 bg-transparent p-2 me-1"
-                                    data-bs-toggle="modal"
+                                <button class="border-0 bg-transparent p-2 me-1" data-bs-toggle="modal"
                                     data-bs-target="#editViolationModal-{{ $record->id }}"
-                                    onclick="event.stopPropagation()"
-                                    title="Edit violation"
+                                    onclick="event.stopPropagation()" title="Edit violation"
                                     style="cursor: pointer; transition: all 0.3s ease; border-radius: 0.5rem;"
                                     onmouseover="this.style.backgroundColor='rgba(13, 110, 253, 0.1)'; this.style.transform='translateY(-2px)'"
                                     onmouseout="this.style.backgroundColor='transparent'; this.style.transform='translateY(0)'">
                                     <i class="bi bi-pencil-square" style="font-size: 1.1rem; color: #0c0429;"></i>
                                 </button>
-                                <button class="border-0 bg-transparent p-2 ms-1 me-1"
-                                    data-bs-toggle="modal"
+                                <button class="border-0 bg-transparent p-2 ms-1 me-1" data-bs-toggle="modal"
                                     data-bs-target="#deleteViolationModal-{{ $record->id }}"
-                                    onclick="event.stopPropagation()"
-                                    title="Delete violation"
+                                    onclick="event.stopPropagation()" title="Delete violation"
                                     style="cursor: pointer; transition: all 0.3s ease; border-radius: 0.5rem;"
                                     onmouseover="this.style.backgroundColor='rgba(220, 53, 69, 0.1)'; this.style.transform='translateY(-2px)'"
                                     onmouseout="this.style.backgroundColor='transparent'; this.style.transform='translateY(0)'">
@@ -133,6 +129,23 @@
                     </tbody>
                 </table>
             </div>
+
+            <div class="d-flex d-md-none">
+                <div class="row row-cols-1 row-cols-sm-2 g-3">
+                    @forelse ($violationRecords as $record)
+                    <div class="col">
+                        <x-violation-card :record="$record" />
+
+                    </div>
+                    <x-modals.view-violation :record="$record" :id="'viewViolationModal-'.$record->id" />
+                    @empty
+                    <div class="col">
+                        <span>No Records Found</span>
+                    </div>
+                    @endforelse
+                </div>
+            </div>
+
             <div class="d-flex flex-column justify-content-end align-items-end mx-3">
                 <small class="text-muted" id="rowCounter">Showing {{ $violationRecordCount }} violations</small>
                 <span class="">{{ $violationRecords->links() }}</span>

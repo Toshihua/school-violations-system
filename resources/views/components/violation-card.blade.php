@@ -1,5 +1,5 @@
-<div class="card border-0 h-100" style="box-shadow: 0 2px 8px rgba(0,0,0,0.05); border-radius: 8px;">
-    <div class="card-body p-3">
+<div class="card shadow-lg">
+    <div class="card-body">
         <div class="d-flex justify-content-between align-items-start mb-3">
             <span class="fw-bold" style="color: #800000;">
                 V-2026-{{ str_pad($record->id, 3, '0', STR_PAD_LEFT) }}
@@ -21,7 +21,8 @@
             </small>
         </div>
 
-        <button class="btn w-100 btn-sm fw-bold" style="border: 1px solid #800000; color: #800000; padding: 8px;">
+        <button class="btn w-100 btn-sm fw-bold" style="border: 1px solid #800000; color: #800000; padding: 8px;"
+            data-bs-toggle="modal" data-bs-target="#viewViolationModal-{{ $record->id }}">
             <i class="bi bi-eye me-1"></i> View Details
         </button>
     </div>
