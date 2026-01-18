@@ -20,14 +20,13 @@ class ViolationController extends Controller
      */
     public function index(Request $request)
     {
+        // Get Data
         $violations = Violation::all();
+        $statuses = Status::all();
+        $violationRecords = ViolationRecord::with(['status', 'user', 'violationSanction.violation', 'violationSanction.sanction', 'appeal']);
 
         // Get search input
         $search = $request->input('search');
-        $statusId = $request->input('status');
-
-        $violationRecords = ViolationRecord::with(['status', 'user', 'violationSanction.violation', 'violationSanction.sanction', 'appeal']);
-
         if ($search) {
             $violationRecords->whereHas('user', function ($q) use ($search) {
                 $q->where('school_id', 'like', "%{$search}%")
@@ -38,20 +37,20 @@ class ViolationController extends Controller
         }
 
         // Apply status filter
+        $statusId = $request->input('status');
         if ($statusId && $statusId !== 'all') {
             $violationRecords->where('status_id', $statusId);
         }
 
-        $violationRecordCount = (clone $violationRecords)->count();
+        // Summary Cards
+        $violationRecordCount = $violationRecords->count();
         $under_reviewCount = ViolationRecord::where('status_id', 1)->count();
         $pendingCount = ViolationRecord::where('status_id', 2)->count();
         $resolvedCount = ViolationRecord::where('status_id', 3)->count();
 
-        $statuses = Status::all();
+        // Paginate Violation Record
+        $violationRecords = $violationRecords->latest()->paginate(10);
 
-        $violationRecords = $violationRecords->latest()->paginate(10)->withQueryString();
-
-        // return response()->json($violationRecords);
         return view(
             'admin.violations-management',
             compact(
@@ -71,13 +70,12 @@ class ViolationController extends Controller
      */
     public function store(Request $request)
     {
-        // dd($request->all());
 
         $student_id = request('student_id');
         $violation_id = request('violation_id');
 
         if ($student_id == null) {
-            return 'Error:  Missing values (student_id or violation_id)'; // Add better error message here.
+            return 'Error:  Missing values (student_id or violation_id)';
         }
 
         $user_id = $this->getUserId($student_id);
@@ -89,13 +87,15 @@ class ViolationController extends Controller
             return 'Error:  Action failed.';
         }
 
+        // Record for mailing
         $violationRecord = ViolationRecord::with(['status', 'user', 'violationSanction.violation', 'violationSanction.sanction', 'appeal'])
             ->where('user_id', $user_id)
             ->latest()
             ->first();
 
-        Mail::to($violationRecord->user->email)
-            ->send(new ViolationRecordedMail($violationRecord));
+        // Send Violation Mail (comment out muna baka maubos free credit HAHAHAH)
+        // Mail::to($violationRecord->user->email)
+        //     ->send(new ViolationRecordedMail($violationRecord));
 
         return redirect()->route('admin.violations-management.index');
     }

@@ -1,117 +1,133 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-            color: #333;
-        }
-
-        .container {
-            max-width: 600px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        .header {
-            background-color: #800000;
-            color: white;
-            padding: 20px;
-            text-align: center;
-        }
-
-        .content {
-            background-color: #f9f9f9;
-            padding: 20px;
-            border: 1px solid #ddd;
-        }
-
-        .info-row {
-            margin: 10px 0;
-            padding: 10px;
-            background-color: white;
-            border-left: 3px solid #800000;
-        }
-
-        .label {
-            font-weight: bold;
-            color: #800000;
-        }
-
-        .button {
-            display: inline-block;
-            padding: 10px 20px;
-            background-color: #800000;
-            color: white;
-            text-decoration: none;
-            border-radius: 5px;
-            margin-top: 20px;
-        }
-
-        .footer {
-            text-align: center;
-            padding: 20px;
-            color: #666;
-            font-size: 12px;
-        }
-    </style>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Violation Record Notice</title>
 </head>
 
-<body>
-    <div class="container">
-        <div class="header">
-            <h2>Violation Record Notice</h2>
-        </div>
+<body
+    style="margin: 0; padding: 0; background-color: #f4f4f4; font-family: Arial, sans-serif; line-height: 1.5; color: #333333;">
+    <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="background-color: #f4f4f4;">
+        <tr>
+            <td align="center" style="padding: 24px 12px;">
+                <table role="presentation" cellpadding="0" cellspacing="0" width="100%"
+                    style="max-width: 600px; background-color: #ffffff; border-radius: 4px; border: 1px solid #e0e0e0;">
+                    <tr>
+                        <td align="center" style="padding: 18px 24px; background-color: #800000; color: #ffffff;">
+                            <div style="font-size: 20px; letter-spacing: 0.08em; text-transform: uppercase;">
+                                <strong>{{ config('app.name') }}</strong>
+                            </div>
+                        </td>
+                    </tr>
 
-        <div class="content">
-            <p>Dear {{ $user->first_name }} {{ $user->last_name }},</p>
+                    {{-- Title --}}
+                    <tr>
+                        <td style="padding: 18px 24px 8px 24px; border-bottom: 1px solid #eeeeee;">
+                            <h1 style="margin: 0; font-size: 18px; font-weight: 600; color: #222222;">
+                                Disciplinary Violation Recorded</h1>
+                        </td>
+                    </tr>
 
-            <p>This is to inform you that a violation has been recorded against your account.</p>
+                    <!-- Content -->
+                    <tr>
+                        <td style="padding: 16px 24px 8px 24px;">
+                            <p style="margin: 0 0 12px; font-size: 14px;">
+                                Dear {{ $user->first_name }} {{ $user->last_name }},
+                            </p>
+                            <p style="margin: 0 0 16px; font-size: 14px;">
+                                This email is to formally inform you that a disciplinary
+                                violation has been recorded in your student record. The
+                                summary of this case is provided below for your
+                                reference.
+                            </p>
+                        </td>
+                    </tr>
 
-            <div class="info-row">
-                <span class="label">Case ID:</span> {{ $record->formatCaseId() }}
-            </div>
+                    <!-- Details -->
+                    <tr>
+                        <td style="padding: 0 24px 8px 24px;">
+                            <table role="presentation" cellpadding="0" cellspacing="0" width="100%"
+                                style="border-collapse: collapse; font-size: 13px; border: 1px solid #e0e0e0;">
+                                <tr>
+                                    <td
+                                        style="width: 35%; padding: 10px 12px; background-color: #fafafa; border-bottom: 1px solid #e0e0e0; font-weight: bold; color: #555555;">
+                                        Case ID</td>
+                                    <td style="padding: 10px 12px; border-bottom: 1px solid #e0e0e0;">{{
+                                        $record->formatCaseId() }}</td>
+                                </tr>
+                                <tr>
+                                    <td
+                                        style="width: 35%; padding: 10px 12px; background-color: #fafafa; border-bottom: 1px solid #e0e0e0; font-weight: bold; color: #555555;">
+                                        Violation</td>
+                                    <td style="padding: 10px 12px; border-bottom: 1px solid #e0e0e0;">{{
+                                        $record->violationSanction->violation->violation_name }}</td>
+                                </tr>
+                                <tr>
+                                    <td
+                                        style="width: 35%; padding: 10px 12px; background-color: #fafafa; border-bottom: 1px solid #e0e0e0; font-weight: bold; color: #555555;">
+                                        Offense count</td>
+                                    <td style="padding: 10px 12px; border-bottom: 1px solid #e0e0e0;">{{
+                                        $record->violationSanction->no_of_offense }}</td>
+                                </tr>
+                                <tr>
+                                    <td
+                                        style="width: 35%; padding: 10px 12px; background-color: #fafafa; font-weight: bold; color: #555555;">
+                                        Sanction</td>
+                                    <td style="padding: 10px 12px;">{{
+                                        $record->violationSanction->sanction->sanction_name }}</td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
 
-            <div class="info-row">
-                <span class="label">Student ID:</span> {{ $user->school_id }}
-            </div>
+                    <!-- Instructions -->
+                    <tr>
+                        <td style="padding: 16px 24px 4px 24px;">
+                            <p style="margin: 0 0 10px; font-size: 13px;">
+                                If you have any questions regarding this case, or if you
+                                believe the information above is inaccurate, you are
+                                encouraged to make an appeal through our website
+                                or visit the Discipline Office
+                            </p>
+                            <p style="margin: 0 0 10px; font-size: 13px;">
+                                You are given <strong>three (3) days</strong> from the date this email is sent to
+                                submit an appeal. If you do not file an appeal within this period, the violation will
+                                be considered final and you will be <strong>required</strong> to report to the
+                                Discipline Office.
+                            </p>
+                        </td>
+                    </tr>
 
-            <div class="info-row">
-                <span class="label">Violation:</span>
-                {{ $record->violationSanction->violation->violation_name }}
-            </div>
+                    <tr>
+                        <td style="padding: 4px 24px 16px 24px;">
+                            <p style="margin: 0; font-size: 12px; color: #666666;">
+                                You may also review your records by logging in to the
+                                system at
+                                <span style="color: #800000;">{{ config('app.url') }}</span>
+                            </p>
+                        </td>
+                    </tr>
 
-            <div class="info-row">
-                <span class="label">Offense Number:</span>
-                {{ $record->violationSanction->no_of_offense }}
-            </div>
+                    <!-- Footer -->
+                    <tr>
+                        <td align="center"
+                            style="padding: 14px 24px 18px 24px; background-color: #fafafa; border-top: 1px solid #e0e0e0; font-size: 11px; color: #777777;">
+                            <p style="font-size: 13px; color: #800000;">
+                                <strong><em>Mula Sa'yo, Para sa Bayan</em></strong>
+                            </p>
+                            <p style="margin: 0 0 4px;">This is an automatically generated message from {{
+                                config('app.name') }}.</p>
+                            <p style="margin: 0;">Please do not reply to this email address.</p>
+                        </td>
+                    </tr>
 
-            <div class="info-row">
-                <span class="label">Sanction:</span>
-                {{ $record->violationSanction->sanction->sanction_name }}
-            </div>
-
-            <div class="info-row">
-                <span class="label">Date Recorded:</span>
-                {{ $record->created_at->format('F d, Y') }}
-            </div>
-
-            <div class="info-row">
-                <span class="label">Status:</span> {{ $record->status->status_name }}
-            </div>
-
-            <p style="margin-top: 20px;">
-                Please visit the Discipline Office if you have any questions or concerns regarding this violation.
-            </p>
-        </div>
-
-        <div class="footer">
-            <p>This is an automated message from the School Violation System.</p>
-            <p>Please do not reply to this email.</p>
-        </div>
-    </div>
+                </table>
+            </td>
+        </tr>
+    </table>
 </body>
 
 </html>
