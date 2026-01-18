@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\ViolationController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Student\AppealController;
 use App\Http\Controllers\Student\DashboardController as StudentDashboardController;
+use App\Http\Controllers\Student\FaqController;
 use App\Http\Controllers\Student\ViolationOverviewController;
 use App\Mail\ViolationRecordedMail;
 use App\Models\ViolationRecord;
@@ -63,6 +64,9 @@ Route::group(['middleware' => 'auth'], function () {
 
         // Post Appeal
         Route::post('/appeal', [AppealController::class, 'store'])->name('appeal.store');
+
+        // FAQs Page
+        Route::get('/faqs', [FaqController::class, 'index'])->name('student.faqs.index');
     });
 
     // Logout user
