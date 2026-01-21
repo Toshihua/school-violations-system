@@ -3,18 +3,24 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Mail\ViolationRecordedMail;
 use App\Models\Status;
 use App\Models\User;
 use App\Models\Violation;
 use App\Models\ViolationRecord;
 use App\Models\ViolationSanction;
+use App\Services\ViolationService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Mail;
 
 class ViolationController extends Controller
 {
+    protected $violationService;
+
+    public function __construct(ViolationService $violationService)
+    {
+        $this->violationService = $violationService;
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -70,19 +76,19 @@ class ViolationController extends Controller
      */
     public function store(Request $request)
     {
-
+        // Get Data
         $student_id = request('student_id');
         $violation_id = request('violation_id');
         $notes = request('description');
+        $user_id = User::where('role_id', 1)->where('school_id', $student_id)->value('id');
 
-        if ($student_id == null) {
-            return 'Error:  Missing values (student_id or violation_id)';
-        }
+        // Get Next Offense Count
+        $violation_count = $this->violationService->countViolationOfStudent($user_id, $violation_id);
 
-        $user_id = $this->getUserId($student_id);
-        $violation_count = $this->countViolationOfStudent($user_id, $violation_id);
-        $vio_sanct_id = $this->determineViolationSanction($violation_id, $violation_count);
+        // Get Violation-Sanction
+        $vio_sanct_id = $this->violationService->determineViolationSanction($violation_id, $violation_count);
 
+        // Insert
         $record = ViolationRecord::create([
             'user_id' => $user_id,
             'vio_sanct_id' => $vio_sanct_id,
@@ -90,59 +96,11 @@ class ViolationController extends Controller
             'status_id' => 1,
         ]);
 
-        if (!$record) {
-            return 'Error:  Action failed.';
-        }
         // Send Email notification
-        // $this->sendViolationEmail($record, new ViolationRecordedMail($record));
-        
+        // $this->violationService->sendViolationEmail($record, new ViolationRecordedMail($record));
+
         session()->flash('response', 'Violation record created.');
         return redirect()->route('admin.violations-management.index');
-    }
-
-    private function getUserId($student_id)
-    {
-        $user_id = User::where('role_id', 1)->where('school_id', $student_id)->get('id')->first();
-
-        return $user_id->id ?? null;
-    }
-
-    private function countViolationOfStudent($user_id, $violation_id)
-    {
-
-        $max_offenses = ViolationSanction::where('violation_id', $violation_id)->orderBy('no_of_offense', 'desc')->get()->first()->no_of_offense;
-
-        $max_offenses = intval($max_offenses);
-
-        $violation_count = ViolationRecord::join('violation_sanctions', 'violation_records.vio_sanct_id', '=', 'violation_sanctions.id')
-            ->where('violation_records.user_id', $user_id)
-            ->where('violation_sanctions.violation_id', $violation_id)
-            ->orderBy('no_of_offense', 'desc')
-            ->get()
-            ->first()
-            ->no_of_offense ?? 0;
-
-        $violation_count = intval($violation_count);
-
-        if ($violation_count < $max_offenses) {
-
-            $violation_count = $violation_count + 1;
-
-            return $violation_count;
-        }
-
-        return $violation_count;
-    }
-
-    private function determineViolationSanction($violation_id, $violation_count)
-    {
-        $vio_sanct_id = ViolationSanction::where('violation_id', $violation_id)
-            ->where('no_of_offense', $violation_count)
-            ->get('id')
-            ->first()
-            ->id;
-
-        return $vio_sanct_id;
     }
 
     /**
@@ -173,8 +131,8 @@ class ViolationController extends Controller
         }
 
         // If the current record's violation_id and newly-entered violation_id are different
-        $violation_count = $this->countViolationOfStudent($user_id, $violation_id);
-        $vio_sanct_id = $this->determineViolationSanction($violation_id, $violation_count);
+        $violation_count = $this->violationService->countViolationOfStudent($user_id, $violation_id);
+        $vio_sanct_id = $this->violationService->determineViolationSanction($violation_id, $violation_count);
 
         $result = $violations_management->update([
             'vio_sanct_id' => $vio_sanct_id,
@@ -186,7 +144,7 @@ class ViolationController extends Controller
             return 'Error: Action failed';
         }
 
-       session()->flash('response', 'Violation record updated.');
+        session()->flash('response', 'Violation record updated.');
 
         return redirect()->route('admin.violations-management.index');
     }
@@ -198,7 +156,7 @@ class ViolationController extends Controller
     {
         $result = $violations_management->delete();
 
-        session()->flash('response', 'Violation record deleted.');   
+        session()->flash('response', 'Violation record deleted.');
 
         return redirect()->route('admin.violations-management.index');
     }
@@ -213,24 +171,8 @@ class ViolationController extends Controller
             'status_id' => 3,
         ]);
 
-        session()->flash('response', 'Violation record resolved.');    
+        session()->flash('response', 'Violation record resolved.');
+
         return redirect()->route('admin.violations-management.index');
-    }
-
-    /**
-     * Send Email for Violation
-     */
-    private function sendViolationEmail(ViolationRecord $record, $mailable)
-    {
-        // Ensure related data and user email are available
-        $record->loadMissing(['status', 'user', 'violationSanction.violation', 'violationSanction.sanction', 'appeal']);
-
-        $user = $record->user;
-
-        if (! $user || ! $user->email) {
-            return;
-        }
-
-        Mail::to('joshua123.jdr@gmail.com')->send($mailable);
     }
 }
