@@ -60,6 +60,9 @@ Route::group(['middleware' => 'auth'], function () {
         // User Dashboard Page
         Route::get('/dashboard', [StudentDashboardController::class, 'index'])->name('student.dashboard.index');
 
+        // Single Violation Record Page
+        Route::get('/violations/{violationRecord}', [StudentDashboardController::class, 'show'])->name('student.violation.show');
+
         // Violation Overview Page
         Route::get('/violation-overview', [ViolationOverviewController::class, 'index'])->name('student.violation.overview');
 
