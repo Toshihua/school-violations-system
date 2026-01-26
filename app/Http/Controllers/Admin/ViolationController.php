@@ -118,6 +118,11 @@ class ViolationController extends Controller
      */
     public function update(ViolationRecord $violations_management)
     {
+        // Handle Edit on dismissed violation
+        if ($violations_management->status_id === 4) {
+            session()->flash('response', 'Dismissed Violation cannot be changed.');
+            return redirect()->route('admin.violations-management.index');
+        }
 
         $violation_id = request('violation_id');
 
@@ -153,6 +158,12 @@ class ViolationController extends Controller
      */
     public function destroy(ViolationRecord $violations_management)
     {
+        // Handle delete on dismissed violation
+        if ($violations_management->status_id === 4) {
+            session()->flash('response', 'Dismissed Violation cannot be deleted.');
+            return redirect()->route('admin.violations-management.index');
+        }
+
         $this->utilitiesService->updateViolations($violations_management);
 
         $violations_management->delete();
