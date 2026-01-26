@@ -36,7 +36,6 @@ class AuthController extends Controller
 
         Log::warning('Failed login attempt', [
             'email' => $request->input('email'),
-            'role' => Auth::user()->role->role_name,
         ]);
 
         return back()->withErrors([
