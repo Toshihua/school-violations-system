@@ -1,6 +1,6 @@
-# School Violation System
+# Iskorrection - A PUP-Based School Violation System
 
-A comprehensive system for managing and tracking school violations, built with PHP and modern web technologies.
+A comprehensive system for managing and tracking school violations, built with laravel framework.
 
 ---
 
@@ -50,7 +50,7 @@ npm run build
 1. **Copy the example environment file:**
 
 ```bash
-cp .env.example .env
+copy .env.example .env
 ```
 
 2. **Generate application key:**
@@ -107,7 +107,12 @@ php artisan serve
 ## Default Credentials
 
 After seeding the database, you can log in with these default credentials:
+Student: 
+- Email: `student@iskolarngbayan.pup.edu.ph`
+- Password: `secret`
 
+Admin: 
+- Email: `admin@pup.edu.ph`
 - Password: `secret`
 
 ---
@@ -116,13 +121,9 @@ After seeding the database, you can log in with these default credentials:
 
 - Student violation tracking and management
 - Multiple violation categories and severity levels
-- Teacher and administrator roles with different permissions
+- Student and administrator roles with different permissions
 - Violation history and reporting
-
-  (Not Sure yet)
 - Email notifications for serious violations
-- Student and parent portal access
-- Export violation reports to PDF/Excel
 
 ---
 
@@ -217,4 +218,5 @@ This project is licensed under the MIT License. See the `LICENSE` file for detai
 
 ## Acknowledgments
 
-Built with Laravel and modern web technologies to help educational institutions maintain discipline and track student behavior effectively.
+Built with Laravel.
+Final project for Web Development
