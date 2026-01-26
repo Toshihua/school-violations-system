@@ -10,6 +10,8 @@ use App\Models\Status;
 use App\Models\ViolationRecord;
 use App\Models\ViolationSanction;
 use App\Services\UtilitiesService;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 
 class AppealController extends Controller
@@ -66,7 +68,7 @@ class AppealController extends Controller
             'is_accepted' => true,
         ]);
 
-        $violationRecord = $appeal->violationRecord();
+        $violationRecord = $appeal->violationRecord;
 
         $violationRecord->update([
             'status_id' => 4, // Set status to 'Dismissed'
@@ -77,6 +79,13 @@ class AppealController extends Controller
 
         $record = ViolationRecord::findOrFail($appeal->violation_record_id);
         $this->utilitiesService->updateViolations($record);
+
+        Log::info('Appeal approved', [
+            'admin_id' => Auth::id(),
+            'appeal_id' => $appeal->id,
+            'student_id' => $violationRecord->user_id,
+            'violation_record_id' => $violationRecord->id,
+        ]);
 
         session()->flash('response', 'Appeal has been accepted, and the student has been notified.');
         return redirect()->route('admin.appeals.index');
@@ -96,14 +105,21 @@ class AppealController extends Controller
             'is_accepted' => false,
         ]);
 
-        $violationRecordRelation = $appeal->violationRecord();
+        $violationRecord = $appeal->violationRecord;
 
-        $violationRecordRelation->update([
-            'status_id' => 2, // Set status to 'In progress'   
+        $violationRecord->update([
+            'status_id' => 2, // In progress
         ]);
 
         // Send email notification
         $this->sendAppealMail($appeal, new AppealDeniedMail($appeal));
+
+        Log::info('Appeal rejected', [
+            'admin_id' => Auth::id(),
+            'appeal_id' => $appeal->id,
+            'student_id' => $violationRecord->user_id,
+            'violation_record_id' => $violationRecord->id
+        ]);
 
         session()->flash('response', 'Appeal has been rejected, and the student has been notified.');
         return redirect()->route('admin.appeals.index');

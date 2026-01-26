@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\UserRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class AuthController extends Controller
 {
@@ -18,6 +19,12 @@ class AuthController extends Controller
         $credentials = $request->validated();
 
         if (Auth::attempt($credentials)) {
+
+            Log::info('User Logged in:', [
+                'email' => Auth::user()->email,
+                'role' => Auth::user()->role->role_name,
+            ]);
+
             $request->session()->regenerate();
 
             if (Auth::user()->role->role_name === 'Faculty') {
@@ -27,6 +34,11 @@ class AuthController extends Controller
             return redirect()->intended('/student/dashboard');
         }
 
+        Log::warning('Failed login attempt', [
+            'email' => $request->input('email'),
+            'role' => Auth::user()->role->role_name,
+        ]);
+
         return back()->withErrors([
             'email' => 'Invalid credentials.',
         ]);
@@ -34,7 +46,13 @@ class AuthController extends Controller
 
     public function logout(Request $request)
     {
+        Log::info('User Logging out:', [
+            'email' => Auth::user()->email,
+            'role' => Auth::user()->role->role_name,
+        ]);
+
         Auth::logout();
+
 
         // Remove all data from the session
         $request->session()->invalidate();

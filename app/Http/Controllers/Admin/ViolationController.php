@@ -14,6 +14,8 @@ use App\Models\ViolationSanction;
 use App\Services\UtilitiesService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class ViolationController extends Controller
 {
@@ -101,8 +103,18 @@ class ViolationController extends Controller
             'status_id' => 1,
         ]);
 
+        Log::info('Violation record created', [
+            'admin_id' => Auth::id(),
+            'student_id' => $user_id,
+            'violation_record_id' => $record->id,
+            'violation_id' => $violation_id,
+            'notes' => $notes,
+        ]);
+
         // Send Email notification
         $this->utilitiesService->sendViolationEmail($record, new ViolationRecordedMail($record));
+
+
 
         session()->flash('response', 'Violation record created.');
         return redirect()->route('admin.violations-management.index');
@@ -148,6 +160,14 @@ class ViolationController extends Controller
             'updated_at' => Carbon::now(),
         ]);
 
+        Log::info('Violation record updated', [
+            'admin_id' => Auth::id(),
+            'student_id' => $user_id,
+            'violation_record_id' => $violations_management->id,
+            'prev_violation_id' => $prev_violation_id,
+            'new_violation_id' => $violation_id,
+        ]);
+
         session()->flash('response', 'Violation record updated.');
 
         return redirect()->route('admin.violations-management.index');
@@ -168,6 +188,12 @@ class ViolationController extends Controller
 
         $violations_management->delete();
 
+        Log::warning('Violation record deleted', [
+            'admin_id' => Auth::id(),
+            'student_id' => $violations_management->user_id,
+            'violation_record_id' => $violations_management->id,
+        ]);
+
         session()->flash('response', 'Violation record deleted.');
 
         return redirect()->route('admin.violations-management.index');
@@ -184,6 +210,13 @@ class ViolationController extends Controller
         ]);
 
         $this->utilitiesService->sendViolationEmail($violations_management, new ViolationResolvedMail($violations_management));
+
+
+        Log::info('Violation record resolved', [
+            'admin_id' => Auth::id(),
+            'student_id' => $violations_management->user_id,
+            'violation_record_id' => $violations_management->id,
+        ]);
 
         session()->flash('response', 'Violation record resolved.');
 
